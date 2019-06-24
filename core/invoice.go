@@ -46,9 +46,12 @@ func (i Invoice) Update(key husk.Key) error {
 		return err
 	}
 
+	err = entry.Set(i)
+
+	if err != nil {
+		return err
+	}
+
 	defer ctx.Invoices.Save()
-
-	entry.Set(i)
-
 	return ctx.Invoices.Update(entry)
 }
