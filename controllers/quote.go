@@ -1,23 +1,15 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 
+	"github.com/louisevanderlith/droxolite/xontrols"
 	"github.com/louisevanderlith/husk"
-	"github.com/louisevanderlith/mango/control"
 	"github.com/louisevanderlith/quote/core"
 )
 
 type QuoteController struct {
-	control.APIController
-}
-
-func NewQuoteCtrl(ctrlMap *control.ControllerMap) *QuoteController {
-	result := &QuoteController{}
-	result.SetInstanceMap(ctrlMap)
-
-	return result
+	xontrols.APICtrl
 }
 
 // @Title GetQuotes
@@ -38,7 +30,7 @@ func (req *QuoteController) Get() {
 // @Success 200 {core.Entity} core.Entity
 // @router /:key [get]
 func (req *QuoteController) GetByID() {
-	key, err := husk.ParseKey(req.Ctx.Input.Param(":key"))
+	key, err := husk.ParseKey(req.FindParam("key"))
 
 	if err != nil {
 		req.Serve(http.StatusBadRequest, err, nil)
@@ -63,7 +55,7 @@ func (req *QuoteController) GetByID() {
 // @router / [post]
 func (req *QuoteController) Post() {
 	var entry core.Invoice
-	err := json.Unmarshal(req.Ctx.Input.RequestBody, &entry)
+	err := req.Body(&entry)
 
 	if err != nil {
 		req.Serve(http.StatusBadRequest, err, nil)

@@ -5,28 +5,29 @@ package routers
 // @Description API used to access and modify enity details.
 
 import (
-	"fmt"
-	"strings"
-
-	"github.com/louisevanderlith/mango"
+	"github.com/louisevanderlith/droxolite"
 	"github.com/louisevanderlith/quote/controllers"
 
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/plugins/cors"
-	"github.com/louisevanderlith/mango/control"
-	secure "github.com/louisevanderlith/secure/core"
-	"github.com/louisevanderlith/secure/core/roletype"
+	"github.com/louisevanderlith/droxolite/roletype"
 )
 
-func Setup(s *mango.Service, host string) {
-	ctrlmap := EnableFilters(s, host)
+func Setup(poxy *droxolite.Epoxy) {
+	//Quote
+	quoteCtrl := &controllers.QuoteController{}
+	quoteGroup := droxolite.NewRouteGroup("quote", quoteCtrl)
+	quoteGroup.AddRoute("/", "POST", roletype.User, quoteCtrl.Post)
+	quoteGroup.AddRoute("/{key:[0-9]+\x60[0-9]+}", "GET", roletype.User, quoteCtrl.GetByID)
+	quoteGroup.AddRoute("/all/{pagesize:[A-Z][0-9]+}", "GET", roletype.User, quoteCtrl.Get)
+	poxy.AddGroup(quoteGroup)
+	/*ctrlmap := EnableFilters(s, host)
 	quoteCtrl := controllers.NewQuoteCtrl(ctrlmap)
 
 	beego.Router("/v1/quote", quoteCtrl, "post:Post")
 	beego.Router("/v1/quote/:key", quoteCtrl, "get:GetByID")
-	beego.Router("/v1/quote/all/:pagesize", quoteCtrl, "get:Get")
+	beego.Router("/v1/quote/all/:pagesize", quoteCtrl, "get:Get")*/
 }
 
+/*
 func EnableFilters(s *mango.Service, host string) *control.ControllerMap {
 	ctrlmap := control.CreateControlMap(s)
 
@@ -45,4 +46,4 @@ func EnableFilters(s *mango.Service, host string) *control.ControllerMap {
 	}), false)
 
 	return ctrlmap
-}
+}*/
