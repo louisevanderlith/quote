@@ -15,9 +15,9 @@ func Setup(poxy *droxolite.Epoxy) {
 	//Quote
 	quoteCtrl := &controllers.QuoteController{}
 	quoteGroup := droxolite.NewRouteGroup("quote", quoteCtrl)
-	quoteGroup.AddRoute("/", "POST", roletype.User, quoteCtrl.Post)
-	quoteGroup.AddRoute("/{key:[0-9]+\x60[0-9]+}", "GET", roletype.User, quoteCtrl.GetByID)
-	quoteGroup.AddRoute("/all/{pagesize:[A-Z][0-9]+}", "GET", roletype.User, quoteCtrl.Get)
+	quoteGroup.AddRoute("Create Quote", "", "POST", roletype.User, quoteCtrl.Post)
+	quoteGroup.AddRoute("Quote by Key", "/{key:[0-9]+\x60[0-9]+}", "GET", roletype.User, quoteCtrl.GetByID)
+	quoteGroup.AddRoute("All Quotes", "/all/{pagesize:[A-Z][0-9]+}", "GET", roletype.User, quoteCtrl.Get)
 	poxy.AddGroup(quoteGroup)
 	/*ctrlmap := EnableFilters(s, host)
 	quoteCtrl := controllers.NewQuoteCtrl(ctrlmap)
