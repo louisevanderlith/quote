@@ -5,16 +5,18 @@ package routers
 // @Description API used to access and modify enity details.
 
 import (
-	"github.com/louisevanderlith/droxolite"
 	"github.com/louisevanderlith/quote/controllers"
 
+	"github.com/louisevanderlith/droxolite/mix"
+	"github.com/louisevanderlith/droxolite/resins"
 	"github.com/louisevanderlith/droxolite/roletype"
+	"github.com/louisevanderlith/droxolite/routing"
 )
 
-func Setup(poxy *droxolite.Epoxy) {
+func Setup(poxy resins.Epoxi) {
 	//Quote
 	quoteCtrl := &controllers.QuoteController{}
-	quoteGroup := droxolite.NewRouteGroup("quote", quoteCtrl)
+	quoteGroup := routing.NewRouteGroup("quote", mix.JSON)
 	quoteGroup.AddRoute("Create Quote", "", "POST", roletype.User, quoteCtrl.Post)
 	quoteGroup.AddRoute("Quote by Key", "/{key:[0-9]+\x60[0-9]+}", "GET", roletype.User, quoteCtrl.GetByID)
 	quoteGroup.AddRoute("All Quotes", "/all/{pagesize:[A-Z][0-9]+}", "GET", roletype.User, quoteCtrl.Get)
