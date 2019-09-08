@@ -8,14 +8,20 @@ import (
 	"github.com/louisevanderlith/quote/core"
 )
 
-type QuoteController struct {
+type Quotes struct {
+}
+
+func (req *Quotes) Get(ctx context.Requester) (int, interface{}) {
+	results := core.GetInvoices(1, 10)
+
+	return http.StatusOK, results
 }
 
 // @Title GetQuotes
 // @Description Gets the quotes
 // @Success 200 {[]core.Entity} []core.Entity
 // @router /all/:pagesize [get]
-func (req *QuoteController) Get(ctx context.Contexer) (int, interface{}) {
+func (req *Quotes) Search(ctx context.Requester) (int, interface{}) {
 	page, size := ctx.GetPageData()
 
 	results := core.GetInvoices(page, size)
@@ -28,7 +34,7 @@ func (req *QuoteController) Get(ctx context.Contexer) (int, interface{}) {
 // @Param	key			path	husk.Key 	true		"Key of the entity you require"
 // @Success 200 {core.Entity} core.Entity
 // @router /:key [get]
-func (req *QuoteController) GetByID(ctx context.Contexer) (int, interface{}) {
+func (req *Quotes) View(ctx context.Requester) (int, interface{}) {
 	key, err := husk.ParseKey(ctx.FindParam("key"))
 
 	if err != nil {
@@ -50,7 +56,7 @@ func (req *QuoteController) GetByID(ctx context.Contexer) (int, interface{}) {
 // @Success 200 {map[string]string} map[string]string
 // @Failure 403 body is empty
 // @router / [post]
-func (req *QuoteController) Post(ctx context.Contexer) (int, interface{}) {
+func (req *Quotes) Create(ctx context.Requester) (int, interface{}) {
 	var entry core.Invoice
 	err := ctx.Body(&entry)
 
@@ -73,7 +79,7 @@ func (req *QuoteController) Post(ctx context.Contexer) (int, interface{}) {
 // @Success 200 {map[string]string} map[string]string
 // @Failure 403 body is empty
 // @router / [put]
-func (req *QuoteController) Put(ctx context.Contexer) (int, interface{}) {
+func (req *Quotes) Update(ctx context.Requester) (int, interface{}) {
 	body := &core.Invoice{}
 	key, err := ctx.GetKeyedRequest(body)
 
