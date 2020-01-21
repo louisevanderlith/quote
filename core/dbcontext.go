@@ -1,6 +1,9 @@
 package core
 
-import "github.com/louisevanderlith/husk"
+import (
+	"github.com/louisevanderlith/husk"
+	"github.com/louisevanderlith/husk/serials"
+)
 
 type context struct {
 	Invoices husk.Tabler
@@ -10,7 +13,7 @@ var ctx context
 
 func CreateContext() {
 	ctx = context{
-		Invoices: husk.NewTable(new(Invoice)),
+		Invoices: husk.NewTable(Invoice{}, serials.GobSerial{}),
 	}
 }
 
