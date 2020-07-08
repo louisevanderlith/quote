@@ -3,17 +3,17 @@ package core
 import "github.com/louisevanderlith/husk"
 
 type context struct {
-	Invoices husk.Tabler
+	Submissions husk.Tabler
 }
 
 var ctx context
 
 func CreateContext() {
 	ctx = context{
-		Invoices: husk.NewTable(new(Invoice)),
+		Submissions: husk.NewTable(Submission{}),
 	}
 }
 
 func Shutdown() {
-	ctx.Invoices.Save()
+	ctx.Submissions.Save()
 }

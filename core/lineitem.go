@@ -9,6 +9,6 @@ type LineItem struct {
 	SubItems    []string
 }
 
-func (l LineItem) Valid() (bool, error) {
+func (l LineItem) Valid() error {
 	return husk.ValidateStruct(&l)
 }
