@@ -16,7 +16,7 @@ type Submission struct {
 }
 
 func (i Submission) Valid() error {
-	return husk.ValidateStruct(&i)
+	return husk.ValidateStruct(i)
 }
 
 func GetInvoices(page, pagesize int) (husk.Collection, error) {

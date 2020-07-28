@@ -10,5 +10,5 @@ type LineItem struct {
 }
 
 func (l LineItem) Valid() error {
-	return husk.ValidateStruct(&l)
+	return husk.ValidateStruct(l)
 }
