@@ -9,7 +9,7 @@ import (
 
 type Submission struct {
 	Status    statustype.Enum
-	IsInvoice  bool
+	IsInvoice bool
 	DueDate   time.Time
 	Number    int
 	LineItems []LineItem
@@ -28,19 +28,19 @@ func GetInvoice(key husk.Key) (husk.Recorder, error) {
 }
 
 func (i Submission) Create() (husk.Recorder, error) {
-	rec := ctx.Submissions.Create(i)
-
-	if rec.Error != nil {
-		return nil, rec.Error
-	}
-
-	err := ctx.Submissions.Save()
+	rec, err := ctx.Submissions.Create(i)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return rec.Record, nil
+	err = ctx.Submissions.Save()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return rec, nil
 }
 
 func (i Submission) Update(key husk.Key) error {

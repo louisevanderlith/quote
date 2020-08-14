@@ -1,17 +1,16 @@
 package handles
 
 import (
+	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
 	"log"
 	"net/http"
 
-	"github.com/louisevanderlith/droxolite/context"
 	"github.com/louisevanderlith/husk"
 	"github.com/louisevanderlith/quote/core"
 )
 
 func GetSubmissions(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
 	results, err := core.GetInvoices(1, 10)
 
 	if err != nil {
@@ -20,7 +19,7 @@ func GetSubmissions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(results))
+	err = mix.Write(w, mix.JSON(results))
 
 	if err != nil {
 		log.Println("Serve Error", err)
@@ -32,8 +31,7 @@ func GetSubmissions(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {[]core.Entity} []core.Entity
 // @router /all/:pagesize [get]
 func SearchSubmissions(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	page, size := ctx.GetPageData()
+	page, size := drx.GetPageData(r)
 
 	results, err := core.GetInvoices(page, size)
 
@@ -43,7 +41,7 @@ func SearchSubmissions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(results))
+	err = mix.Write(w, mix.JSON(results))
 
 	if err != nil {
 		log.Println("Serve Error", err)
@@ -56,8 +54,7 @@ func SearchSubmissions(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {core.Entity} core.Entity
 // @router /:key [get]
 func ViewSubmission(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	key, err := husk.ParseKey(ctx.FindParam("key"))
+	key, err := husk.ParseKey(drx.FindParam(r, "key"))
 
 	if err != nil {
 		log.Println("ParseKey Error", err)
@@ -73,7 +70,7 @@ func ViewSubmission(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(record))
+	err = mix.Write(w, mix.JSON(record))
 
 	if err != nil {
 		log.Println("Serve Error", err)
@@ -87,9 +84,8 @@ func ViewSubmission(w http.ResponseWriter, r *http.Request) {
 // @Failure 403 body is empty
 // @router / [post]
 func CreateQuote(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
 	var entry core.Submission
-	err := ctx.Body(&entry)
+	err := drx.JSONBody(r, &entry)
 
 	if err != nil {
 		log.Println("Bind Error", err)
@@ -105,7 +101,7 @@ func CreateQuote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON(rec))
+	err = mix.Write(w, mix.JSON(rec))
 
 	if err != nil {
 		log.Println("Serve Error", err)
@@ -119,8 +115,7 @@ func CreateQuote(w http.ResponseWriter, r *http.Request) {
 // @Failure 403 body is empty
 // @router / [put]
 func UpdateSubmission(w http.ResponseWriter, r *http.Request) {
-	ctx := context.New(w, r)
-	key, err := husk.ParseKey(ctx.FindParam("key"))
+	key, err := husk.ParseKey(drx.FindParam(r, "key"))
 
 	if err != nil {
 		log.Println("Parse Key Error", err)
@@ -129,7 +124,7 @@ func UpdateSubmission(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := core.Submission{}
-	err = ctx.Body(&body)
+	err = drx.JSONBody(r, &body)
 
 	if err != nil {
 		log.Println("Bind Error", err)
@@ -145,7 +140,7 @@ func UpdateSubmission(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ctx.Serve(http.StatusOK, mix.JSON("Saved"))
+	err = mix.Write(w, mix.JSON("Saved"))
 
 	if err != nil {
 		log.Println("Serve Error", err)
