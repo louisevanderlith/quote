@@ -1,9 +1,12 @@
 package core
 
 import (
+	"github.com/louisevanderlith/husk/hsk"
+	"github.com/louisevanderlith/husk/op"
+	"github.com/louisevanderlith/husk/records"
+	"github.com/louisevanderlith/husk/validation"
 	"time"
 
-	"github.com/louisevanderlith/husk"
 	"github.com/louisevanderlith/quote/core/statustype"
 )
 
@@ -16,51 +19,21 @@ type Submission struct {
 }
 
 func (i Submission) Valid() error {
-	return husk.ValidateStruct(i)
+	return validation.Struct(i)
 }
 
-func GetInvoices(page, pagesize int) (husk.Collection, error) {
-	return ctx.Submissions.Find(page, pagesize, husk.Everything())
+func GetInvoices(page, pagesize int) (records.Page, error) {
+	return ctx.Submissions.Find(page, pagesize, op.Everything())
 }
 
-func GetInvoice(key husk.Key) (husk.Recorder, error) {
+func GetInvoice(key hsk.Key) (hsk.Record, error) {
 	return ctx.Submissions.FindByKey(key)
 }
 
-func (i Submission) Create() (husk.Recorder, error) {
-	rec, err := ctx.Submissions.Create(i)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = ctx.Submissions.Save()
-
-	if err != nil {
-		return nil, err
-	}
-
-	return rec, nil
+func (i Submission) Create() (hsk.Key, error) {
+	return ctx.Submissions.Create(i)
 }
 
-func (i Submission) Update(key husk.Key) error {
-	entry, err := ctx.Submissions.FindByKey(key)
-
-	if err != nil {
-		return err
-	}
-
-	err = entry.Set(i)
-
-	if err != nil {
-		return err
-	}
-
-	err = ctx.Submissions.Update(entry)
-
-	if err != nil {
-		return err
-	}
-
-	return ctx.Submissions.Save()
+func (i Submission) Update(key hsk.Key) error {
+	return ctx.Submissions.Update(key, i)
 }

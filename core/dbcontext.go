@@ -3,7 +3,7 @@ package core
 import "github.com/louisevanderlith/husk"
 
 type context struct {
-	Submissions husk.Tabler
+	Submissions husk.Table
 }
 
 var ctx context

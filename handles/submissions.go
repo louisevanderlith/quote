@@ -3,10 +3,10 @@ package handles
 import (
 	"github.com/louisevanderlith/droxolite/drx"
 	"github.com/louisevanderlith/droxolite/mix"
+	"github.com/louisevanderlith/husk/keys"
 	"log"
 	"net/http"
 
-	"github.com/louisevanderlith/husk"
 	"github.com/louisevanderlith/quote/core"
 )
 
@@ -50,11 +50,11 @@ func SearchSubmissions(w http.ResponseWriter, r *http.Request) {
 
 // @Title GetQuote
 // @Description Gets the requested Entity
-// @Param	key			path	husk.Key 	true		"Key of the entity you require"
+// @Param	key			path	hsk.Key 	true		"Key of the entity you require"
 // @Success 200 {core.Entity} core.Entity
 // @router /:key [get]
 func ViewSubmission(w http.ResponseWriter, r *http.Request) {
-	key, err := husk.ParseKey(drx.FindParam(r, "key"))
+	key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
 	if err != nil {
 		log.Println("ParseKey Error", err)
@@ -115,7 +115,7 @@ func CreateQuote(w http.ResponseWriter, r *http.Request) {
 // @Failure 403 body is empty
 // @router / [put]
 func UpdateSubmission(w http.ResponseWriter, r *http.Request) {
-	key, err := husk.ParseKey(drx.FindParam(r, "key"))
+	key, err := keys.ParseKey(drx.FindParam(r, "key"))
 
 	if err != nil {
 		log.Println("Parse Key Error", err)

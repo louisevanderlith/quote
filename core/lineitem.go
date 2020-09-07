@@ -1,6 +1,8 @@
 package core
 
-import "github.com/louisevanderlith/husk"
+import (
+	"github.com/louisevanderlith/husk/validation"
+)
 
 type LineItem struct {
 	Description string
@@ -10,5 +12,5 @@ type LineItem struct {
 }
 
 func (l LineItem) Valid() error {
-	return husk.ValidateStruct(l)
+	return validation.Struct(l)
 }
