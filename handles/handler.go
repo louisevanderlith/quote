@@ -2,7 +2,7 @@ package handles
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/louisevanderlith/kong"
+	"github.com/louisevanderlith/kong/middle"
 	"github.com/rs/cors"
 	"net/http"
 )
@@ -19,7 +19,7 @@ func SetupRoutes(scrt, secureUrl string) http.Handler {
 	*/
 	r := mux.NewRouter()
 
-	lst, err := kong.Whitelist(http.DefaultClient, secureUrl, "quote.submission.search", scrt)
+	lst, err := middle.Whitelist(http.DefaultClient, secureUrl, "quote.submission.search", scrt)
 
 	if err != nil {
 		panic(err)
