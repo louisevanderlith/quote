@@ -2,12 +2,11 @@ package handles
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/louisevanderlith/kong/middle"
 	"github.com/rs/cors"
 	"net/http"
 )
 
-func SetupRoutes(scrt, secureUrl string) http.Handler {
+func SetupRoutes(issuer, audience string) http.Handler {
 	/*
 		//Quote
 				quoteCtrl := &controllers.QuoteController{}
@@ -19,14 +18,14 @@ func SetupRoutes(scrt, secureUrl string) http.Handler {
 	*/
 	r := mux.NewRouter()
 
-	lst, err := middle.Whitelist(http.DefaultClient, secureUrl, "quote.submission.search", scrt)
+	//lst, err := middle.Whitelist(http.DefaultClient, secureUrl, "quote.submission.search", scrt)
 
-	if err != nil {
-		panic(err)
-	}
+	//if err != nil {
+	//	panic(err)
+	//}
 
 	corsOpts := cors.New(cors.Options{
-		AllowedOrigins: lst,
+		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{
 			http.MethodGet,
 			http.MethodPost,

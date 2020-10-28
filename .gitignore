@@ -15,3 +15,5 @@ quote
 
 db/*.husk
 !db/*.seed.json
+
+cmd/cmd
